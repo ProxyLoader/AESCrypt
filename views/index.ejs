@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gist API Key Setup</title>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full">
+  <div id="app" class="w-full h-full flex items-center justify-center p-6" style="background: #0f172a;">
+   <div class="w-full max-w-md">
+    <div id="card" class="rounded-2xl shadow-2xl p-8" style="background: #1e293b;">
+     <div class="text-center mb-8">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4" style="background: rgba(59, 130, 246, 0.2);">
+       <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" style="color: #3b82f6;" fill="none" viewbox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
+       </svg>
+      </div>
+      <h1 id="main-title" class="font-bold mb-2" style="color: #f1f5f9; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 28px;">GitHub Gist Personal Token</h1>
+      <p id="subtitle" class="opacity-75" style="color: #94a3b8; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 16px;">Enter your personal token to get started</p>
+     </div>
+     <form id="api-form" class="space-y-4">
+      <div><input type="text" id="api-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" class="w-full px-4 py-3 rounded-lg border-2 transition-all duration-200 outline-none" style="background: #0f172a; color: #f1f5f9; border-color: #94a3b8; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14.4px;">
+      </div><button type="submit" id="submit-btn" class="w-full px-6 py-3 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 active:scale-95" style="background: #3b82f6; color: #ffffff; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 16px;"> Set Token </button>
+      <p id="help-text" class="text-center text-sm opacity-75" style="color: #94a3b8; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 13.6px;">Don't have one? Create it in your GitHub settings</p>
+      <p id="help-text" class="text-center text-sm opacity-75" style="color: #54d2e8; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 13.6px;"> <a href="https://github.com/settings/tokens/new?scopes=repo&description=LambdaVaultCrypt">Click here to create one (Remember to set no expiration!)</a> </p>
+      <div id="success-message" class="hidden p-4 rounded-lg text-center font-medium" style="background: rgba(59, 130, 246, 0.2); color: #3b82f6; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14.4px;">
+       ✓ Token set successfully!
+      </div>
+      <div id="error-message" class="hidden p-4 rounded-lg text-center font-medium" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 14.4px;">
+       ✗ Failed to set token. Please try again.
+      </div>
+     </form>
+    </div>
+   </div><!-- Warning Modal -->
+   <div id="warning-modal" class="hidden fixed inset-0 flex items-center justify-center p-6" style="background: rgba(0, 0, 0, 0.7); z-index: 1000;">
+    <div class="w-full max-w-md rounded-2xl shadow-2xl p-8" style="background: #1e293b;">
+     <div class="text-center mb-6">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-full mb-4" style="background: rgba(251, 191, 36, 0.2);">
+       <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" style="color: #fbbf24;" fill="none" viewbox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+       </svg>
+      </div>
+      <h2 class="font-bold mb-3" style="color: #f1f5f9; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 24px;">Important Warning</h2>
+      <p class="mb-6" style="color: #94a3b8; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 16px; line-height: 1.6;">Make sure that the token doesn't expire, or you will lose all your data!</p>
+     </div>
+     <div class="flex gap-3"><button id="cancel-btn" class="flex-1 px-6 py-3 rounded-lg font-semibold transition-all duration-200" style="background: #334155; color: #f1f5f9; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 16px;"> Cancel </button> <button id="confirm-btn" class="flex-1 px-6 py-3 rounded-lg font-semibold transition-all duration-200" style="background: #3b82f6; color: #ffffff; font-family: Inter, system-ui, -apple-system, sans-serif; font-size: 16px;"> Confirm </button>
+     </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    const defaultConfig = {
+      background_color: "#0f172a",
+      card_color: "#1e293b",
+      text_color: "#f1f5f9",
+      accent_color: "#3b82f6",
+      secondary_text_color: "#94a3b8",
+      main_title: "GitHub Gist Personal Token",
+      subtitle: "Enter your personal token to get started",
+      input_placeholder: "ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      button_text: "Set Token",
+      help_text: "Don't have one? Create it in your GitHub settings",
+      font_family: "Inter, system-ui",
+      font_size: 16
+    };
+
+    let apiKey = "";
+    let pendingToken = "";
+
+    // Get elements
+    const apiInput = document.getElementById('api-input');
+    const form = document.getElementById('api-form');
+    const successMessage = document.getElementById('success-message');
+    const submitBtn = document.getElementById('submit-btn');
+    const warningModal = document.getElementById('warning-modal');
+    const cancelBtn = document.getElementById('cancel-btn');
+    const confirmBtn = document.getElementById('confirm-btn');
+
+    // Input focus/blur effects
+    apiInput.addEventListener('focus', () => {
+      apiInput.style.borderColor = '#3b82f6';
+      apiInput.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.2)';
+    });
+    
+    apiInput.addEventListener('blur', () => {
+      apiInput.style.borderColor = '#94a3b8';
+      apiInput.style.boxShadow = 'none';
+    });
+
+    // Cancel button in modal
+    cancelBtn.addEventListener('click', () => {
+      warningModal.classList.add('hidden');
+      // Re-enable submit button
+      submitBtn.disabled = false;
+      submitBtn.textContent = defaultConfig.button_text;
+      submitBtn.style.opacity = '1';
+      pendingToken = "";
+    });
+
+    // Confirm button in modal
+    confirmBtn.addEventListener('click', () => {
+      // Save token to localStorage
+      localStorage.setItem('gist_token', pendingToken);
+      
+      // Hide modal
+      warningModal.classList.add('hidden');
+      
+      // Show success message
+      successMessage.classList.remove('hidden');
+      
+      // Redirect to dashboard
+      setTimeout(() => {
+        window.open('/dashboard', '_blank');
+      }, 500);
+      
+      // Re-enable submit button
+      submitBtn.disabled = false;
+      submitBtn.textContent = defaultConfig.button_text;
+      submitBtn.style.opacity = '1';
+    });
+
+    // Form submission
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      apiKey = apiInput.value.trim();
+      
+      if (apiKey) {
+        // Disable button and show loading state
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Setting...';
+        submitBtn.style.opacity = '0.7';
+        
+        // Hide any previous messages
+        successMessage.classList.add('hidden');
+        const errorMessage = document.getElementById('error-message');
+        errorMessage.classList.add('hidden');
+        
+        try {
+          // Encode token to base64
+          const encodedToken = btoa(apiKey);
+          
+          // Send POST request to /change with token query parameter
+          const response = await fetch(`/change?token=${encodeURIComponent(encodedToken)}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (response.ok) {
+            // Store the original token for localStorage
+            pendingToken = apiKey;
+            // Show warning modal
+            warningModal.classList.remove('hidden');
+          } else {
+            errorMessage.classList.remove('hidden');
+            setTimeout(() => {
+              errorMessage.classList.add('hidden');
+            }, 3000);
+            // Re-enable button on error
+            submitBtn.disabled = false;
+            submitBtn.textContent = defaultConfig.button_text;
+            submitBtn.style.opacity = '1';
+          }
+        } catch (error) {
+          errorMessage.classList.remove('hidden');
+          setTimeout(() => {
+            errorMessage.classList.add('hidden');
+          }, 3000);
+          // Re-enable button on error
+          submitBtn.disabled = false;
+          submitBtn.textContent = defaultConfig.button_text;
+          submitBtn.style.opacity = '1';
+        }
+      }
+    });
+
+    // Update input value
+    apiInput.addEventListener('input', (e) => {
+      apiKey = e.target.value;
+    });
+
+    // SDK integration
+    async function onConfigChange(config) {
+      const app = document.getElementById('app');
+      const customFont = config.font_family || defaultConfig.font_family;
+      const baseFontStack = 'system-ui, -apple-system, sans-serif';
+      const baseSize = config.font_size || defaultConfig.font_size;
+      
+      app.style.background = config.background_color || defaultConfig.background_color;
+      
+      const card = document.getElementById('card');
+      card.style.background = config.card_color || defaultConfig.card_color;
+      
+      const accentColor = config.accent_color || defaultConfig.accent_color;
+      
+      const mainTitle = document.getElementById('main-title');
+      mainTitle.textContent = config.main_title || defaultConfig.main_title;
+      mainTitle.style.color = config.text_color || defaultConfig.text_color;
+      mainTitle.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      mainTitle.style.fontSize = `${baseSize * 1.75}px`;
+      
+      const subtitle = document.getElementById('subtitle');
+      subtitle.textContent = config.subtitle || defaultConfig.subtitle;
+      subtitle.style.color = config.secondary_text_color || defaultConfig.secondary_text_color;
+      subtitle.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      subtitle.style.fontSize = `${baseSize}px`;
+      
+      apiInput.placeholder = config.input_placeholder || defaultConfig.input_placeholder;
+      apiInput.style.background = config.background_color || defaultConfig.background_color;
+      apiInput.style.color = config.text_color || defaultConfig.text_color;
+      apiInput.style.borderColor = config.secondary_text_color || defaultConfig.secondary_text_color;
+      apiInput.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      apiInput.style.fontSize = `${baseSize * 0.9}px`;
+      
+      submitBtn.textContent = config.button_text || defaultConfig.button_text;
+      submitBtn.style.background = accentColor;
+      submitBtn.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      submitBtn.style.fontSize = `${baseSize}px`;
+      
+      const helpText = document.getElementById('help-text');
+      helpText.textContent = config.help_text || defaultConfig.help_text;
+      helpText.style.color = config.secondary_text_color || defaultConfig.secondary_text_color;
+      helpText.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      helpText.style.fontSize = `${baseSize * 0.85}px`;
+      
+      successMessage.style.background = accentColor + '20';
+      successMessage.style.color = accentColor;
+      successMessage.style.fontFamily = `${customFont}, ${baseFontStack}`;
+      successMessage.style.fontSize = `${baseSize * 0.9}px`;
+    }
+
+    function mapToCapabilities(config) {
+      return {
+        recolorables: [
+          {
+            get: () => config.background_color || defaultConfig.background_color,
+            set: (value) => {
+              config.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          },
+          {
+            get: () => config.card_color || defaultConfig.card_color,
+            set: (value) => {
+              config.card_color = value;
+              window.elementSdk.setConfig({ card_color: value });
+            }
+          },
+          {
+            get: () => config.text_color || defaultConfig.text_color,
+            set: (value) => {
+              config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          },
+          {
+            get: () => config.accent_color || defaultConfig.accent_color,
+            set: (value) => {
+              config.accent_color = value;
+              window.elementSdk.setConfig({ accent_color: value });
+            }
+          },
+          {
+            get: () => config.secondary_text_color || defaultConfig.secondary_text_color,
+            set: (value) => {
+              config.secondary_text_color = value;
+              window.elementSdk.setConfig({ secondary_text_color: value });
+            }
+          }
+        ],
+        borderables: [],
+        fontEditable: {
+          get: () => config.font_family || defaultConfig.font_family,
+          set: (value) => {
+            config.font_family = value;
+            window.elementSdk.setConfig({ font_family: value });
+          }
+        },
+        fontSizeable: {
+          get: () => config.font_size || defaultConfig.font_size,
+          set: (value) => {
+            config.font_size = value;
+            window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      };
+    }
+
+    function mapToEditPanelValues(config) {
+      return new Map([
+        ["main_title", config.main_title || defaultConfig.main_title],
+        ["subtitle", config.subtitle || defaultConfig.subtitle],
+        ["input_placeholder", config.input_placeholder || defaultConfig.input_placeholder],
+        ["button_text", config.button_text || defaultConfig.button_text],
+        ["help_text", config.help_text || defaultConfig.help_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b61c7082151afa0',t:'MTc2NzEwMDIyOC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

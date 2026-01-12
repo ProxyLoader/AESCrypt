@@ -1,0 +1,21 @@
+{
+  "name": "aescrypt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@octokit/rest": "^22.0.1",
+    "axios": "^1.13.2",
+    "ejs": "^3.1.10",
+    "express": "^5.2.1",
+    "multer": "^2.0.2",
+    "octokit": "^5.0.5",
+    "ws": "^8.18.3"
+  }
+}
