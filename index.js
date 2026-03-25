@@ -69,7 +69,6 @@ app.post("/createLambda", async (req, res, next) => {
   });
 });
 
-
 app.get("/decrypt", async (req, res, next) => {
   try {
     const { elink, secret } = req.query;    
